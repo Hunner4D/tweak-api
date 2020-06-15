@@ -10,9 +10,11 @@ require("dotenv").config();
 app.use(logger("dev"));
 app.use(express.json());
 
+app.use("/streams", require("./routes/index"));
+
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
-  console.log("express", express);
-  console.log("path", path);
+  //   console.log("express", express);
+  //   console.log("path", path);
   res.send("Hello");
 });
 
