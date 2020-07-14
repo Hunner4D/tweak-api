@@ -1,10 +1,13 @@
+const Stream = require('../models/streams')
+
 module.exports = {
   create
 }
 
 function create(req: Request, res: Response) {
-  let fullRequest = req.body
-  console.log(fullRequest);
+  let query = { ...req.body  };
+  console.log(query);
+
   res.json();
 };
 
