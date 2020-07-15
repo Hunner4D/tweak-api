@@ -4,17 +4,27 @@ import { WHITE_LISTED_METHODS } from '../utils/constants';
 
 module.exports = {
     auth,
-    checkMethod
+    checkPost,
+    checkReferer
 }
 
 function auth(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
-function checkMethod(req: Request, res: Response, next: NextFunction) {
+function checkPost(req: Request, res: Response, next: NextFunction) {
     const { method } = req;
-    if (!WHITE_LISTED_METHODS.includes(method)) {
-        // cant hit this ish
+    // console.log(req)
+    if (!["POST"].includes(method)) {
+        return res.send(401);
+    }
+    next();
+}
+
+function checkReferer(req: Request, res: Response, next: NextFunction) {
+    const referer = req.headers.referer;
+    // console.log(referer);
+    if (!referer || !referer.includes("http://localhost:3000")) {
         return res.send(401);
     }
     next();

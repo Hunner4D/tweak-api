@@ -12,7 +12,6 @@ let corsOptions: Object = {
   origin: "http://localhost:3000",
   optionsSuccessStatus: 200,
   allowedHeaders: ['Content-Type'],
-  methods: ["GET"]
 }
 
 app.use(cors(corsOptions))
