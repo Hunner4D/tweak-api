@@ -13,11 +13,13 @@ let corsOptions = {
     origin: "http://localhost:3000",
     optionsSuccessStatus: 200,
     allowedHeaders: ['Content-Type'],
+    methods: ["GET"]
 };
 app.use(cors_1.default(corsOptions));
 app.use(morgan_1.default("dev"));
 app.use(express_1.default.json());
-app.use("/streams", require("./routes/index"));
+app.use("/user", require("./routes/user"));
+app.use("/streams", require("./routes/streams"));
 app.get("/", (req, res, next) => {
     //   console.log("express", express);
     //   console.log("path", path);

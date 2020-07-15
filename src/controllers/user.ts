@@ -7,7 +7,7 @@ module.exports = {
 
 function signIn(req: Request, res: Response) {
   let query = { ...req.body  };
-  console.log(query);
+  console.log("sign in query: ", query);
 
   res.json();
 };

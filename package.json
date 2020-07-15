@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "bab": "nodemon --watch .env --watch src --exec babel-node src --source-maps --extensions '.ts'"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +21,10 @@
     "uuid": "^8.2.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-transform-typescript": "^7.10.5",
     "@types/cors": "^2.8.6",
     "@types/express": "^4.17.6",
     "@types/mongoose": "^5.7.31",

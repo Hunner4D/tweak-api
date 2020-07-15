@@ -6,7 +6,7 @@ module.exports = {
 
 function create(req: Request, res: Response) {
   let query = { ...req.body  };
-  console.log(query);
+  console.log("create stream query:", query);
 
   res.json();
 };
