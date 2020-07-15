@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from "express";
 const Stream = require('../models/streams')
 
 module.exports = {
