@@ -10,5 +10,5 @@ function signIn(req: Request, res: Response) {
   let query = { ...req.body };
   console.log("sign in query: ", query);
   const instance: String = uuidv4();
-  res.json({ instance });
+  res.json(instance);
 }

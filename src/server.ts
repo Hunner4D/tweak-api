@@ -2,11 +2,14 @@ import express, { Application, Request, Response, NextFunction } from "express";
 import path from "path";
 import logger from "morgan";
 import cors from "cors";
+import helmet from "helmet";
 
 const app: Application = express();
 
 require("dotenv").config();
-// require("./config/database");
+require("./config/database");
+app.use(logger("dev"));
+app.use(express.json());
 
 let corsOptions: Object = {
   origin: "http://localhost:3000",
@@ -14,10 +17,15 @@ let corsOptions: Object = {
   allowedHeaders: ['Content-Type'],
 }
 
-app.use(cors(corsOptions))
-
-app.use(logger("dev"));
-app.use(express.json());
+app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'"],
+  }
+}))
+app.use(helmet.noCache());
+app.use(helmet.permittedCrossDomainPolicies())
+app.use(cors(corsOptions));
 
 app.use("/user", require("./routes/user"));
 app.use("/streams", require("./routes/streams"));
