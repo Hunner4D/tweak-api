@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    uuid: String,
-    userId: String
+    userId: String,
+    uuid: String
 });
 
 module.exports = mongoose.model("User", userSchema)
