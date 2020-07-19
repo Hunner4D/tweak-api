@@ -18,7 +18,12 @@ function signIn(req: Request, res: Response) {
         const instance: String = uuidv4();
         user.uuid = instance;
         user.save();
-        res.json({ instance, newUser: false });
+        res.json({
+          instance,
+          newUser: false,
+          username: user.username,
+          profileImage: user.profileImage,
+        });
       } else {
         const instance: String = uuidv4();
         new User({
@@ -30,7 +35,12 @@ function signIn(req: Request, res: Response) {
           .save()
           .then((createdUser: any) => {
             console.log("created new user: ", createdUser);
-            res.send({ instance, newUser: true });
+            res.send({
+              instance,
+              newUser: true,
+              username: createdUser.username,
+              profileImage: createdUser.profileImage,
+            });
           });
       }
     })
