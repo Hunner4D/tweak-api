@@ -18,14 +18,14 @@ function signIn(req: Request, res: Response) {
         const instance: String = uuidv4();
         user.uuid = instance;
         user.save();
-        res.json(instance);
+        res.json({instance, newUser: false});
       } else {
         const instance: String = uuidv4();
         new User({ userId: decoded, uuid: instance })
           .save()
           .then((createdUser: any) => {
-            console.log("Created User: ", createdUser);
-            res.send(instance);
+            console.log("created new user: ", createdUser);
+            res.send({instance, newUser: true});
           });
       }
     })

@@ -4,7 +4,7 @@ const User = require("../models/user");
 
 module.exports = {
   checkInstance,
-  checkPost,
+  checkMethod,
   checkReferer,
 };
 
@@ -18,10 +18,10 @@ function checkInstance(req: Request, res: Response, next: NextFunction) {
   });
 }
 
-function checkPost(req: Request, res: Response, next: NextFunction) {
-  const { method } = req;
-  // console.log(req)
-  if (!["POST"].includes(method)) {
+function checkMethod(req: Request, res: Response, next: NextFunction) {
+  const reqMethod = req.method;
+  const routeMethods = Object.keys(req.route.methods)[0].toUpperCase();
+  if (routeMethods !== reqMethod) {
     return res.send(401);
   }
   next();

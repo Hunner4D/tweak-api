@@ -1,14 +1,52 @@
 import { NextFunction, Request, Response } from "express";
-const Stream = require('../models/streams')
+import { Base64 } from "js-base64";
+import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
+const Stream = require("../models/streams");
 
 module.exports = {
-  create
+  getAll,
+  get,
+  create,
+  edit,
+  deleteStream
+};
+
+function getAll(req: Request, res: Response) {
+  Stream.find().then((streams: any) => {
+    let refactoredArray: object[] = [];
+    _.forEach(streams, (item, i) => {
+      refactoredArray.push(_.pick(item, ["uuid", "title", "description"]));
+    });
+    res.json(refactoredArray);
+  });
+}
+
+function get(req: Request, res: Response) {
+  console.log("get specific stream hit");
+  res.json();
 }
 
 function create(req: Request, res: Response) {
-  let query = { ...req.body  };
-  console.log("create stream query:", query);
+  console.log("create stream query:", req.body);
+  let decoded = Base64.atob(req.body.userId);
+  let uuid: String = uuidv4();
+  new Stream({
+    userId: decoded,
+    uuid,
+    title: req.body.title,
+    description: req.body.description,
+  }).save();
 
   res.json();
-};
+}
 
+function edit(req: Request, res: Response) {
+  console.log("edit stream hit");
+  res.json();
+}
+
+function deleteStream(req: Request, res: Response) {
+  console.log("delete stream hit");
+  res.json();
+}

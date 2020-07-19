@@ -5,7 +5,7 @@ const userCtrl = require("../controllers/user");
 
 router.post(
   "/",
-  middleware.checkPost,
+  middleware.checkMethod,
   middleware.checkReferer,
   userCtrl.signIn
 );
