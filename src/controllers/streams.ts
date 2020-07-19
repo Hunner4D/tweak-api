@@ -16,7 +16,7 @@ function getAll(req: Request, res: Response) {
   Stream.find().then((streams: any) => {
     let refactoredArray: object[] = [];
     _.forEach(streams, (item, i) => {
-      refactoredArray.push(_.pick(item, ["uuid", "title", "description"]));
+      refactoredArray.push(_.pick(item, ["userId", "uuid", "title", "description"]));
     });
     res.json(refactoredArray);
   });
@@ -29,10 +29,9 @@ function get(req: Request, res: Response) {
 
 function create(req: Request, res: Response) {
   console.log("create stream query:", req.body);
-  let decoded = Base64.atob(req.body.userId);
   let uuid: String = uuidv4();
   new Stream({
-    userId: decoded,
+    userId: req.body.userId,
     uuid,
     title: req.body.title,
     description: req.body.description,

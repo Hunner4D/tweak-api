@@ -18,14 +18,19 @@ function signIn(req: Request, res: Response) {
         const instance: String = uuidv4();
         user.uuid = instance;
         user.save();
-        res.json({instance, newUser: false});
+        res.json({ instance, newUser: false });
       } else {
         const instance: String = uuidv4();
-        new User({ userId: decoded, uuid: instance })
+        new User({
+          userId: decoded,
+          uuid: instance,
+          username: req.body.username,
+          profileImage: req.body.profileImage,
+        })
           .save()
           .then((createdUser: any) => {
             console.log("created new user: ", createdUser);
-            res.send({instance, newUser: true});
+            res.send({ instance, newUser: true });
           });
       }
     })
