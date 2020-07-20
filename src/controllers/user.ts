@@ -14,7 +14,7 @@ function signIn(req: Request, res: Response) {
   User.findOne({ userId: decoded })
     .then((user: any) => {
       if (user) {
-        console.log("user exists: ", user);
+        // console.log("user exists: ", user);
         const instance: String = uuidv4();
         user.uuid = instance;
         user.save();
@@ -34,7 +34,7 @@ function signIn(req: Request, res: Response) {
         })
           .save()
           .then((createdUser: any) => {
-            console.log("created new user: ", createdUser);
+            // console.log("created new user: ", createdUser);
             res.send({
               instance,
               newUser: true,
