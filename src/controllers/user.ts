@@ -40,7 +40,7 @@ function signIn(req: Request, res: Response) {
               newUser: true,
               username: createdUser.username,
               profileImage: createdUser.profileImage,
-            });
+           });
           });
       }
     })

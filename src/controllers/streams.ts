@@ -46,6 +46,6 @@ function edit(req: Request, res: Response) {
 }
 
 function deleteStream(req: Request, res: Response) {
-  console.log("delete stream hit");
+  
   res.json();
 }

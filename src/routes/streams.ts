@@ -1,6 +1,5 @@
 import express from "express";
 const router = express.Router();
-import { NextFunction, Request, Response } from "express";
 const middleware = require("../middleware");
 const streamsCtrl = require("../controllers/streams");
 
@@ -20,23 +19,23 @@ router.get(
 
 router.post(
   "/",
-  middleware.checkInstance,
+  middleware.matchInstanceToUser,
   middleware.checkMethod,
   middleware.checkReferer,
   streamsCtrl.create
 );
 
 router.put(
-  "/:id",
-  middleware.checkInstance,
+  "/:streamId/:userId/:userInstance",
+  middleware.matchInstanceToUserParams,
   middleware.checkMethod,
   middleware.checkReferer,
   streamsCtrl.edit
 );
 
 router.delete(
-  "/:id",
-  middleware.checkInstance,
+  "/:streamId/:userId/:userInstance",
+  middleware.matchInstanceToUserParams,
   middleware.checkMethod,
   middleware.checkReferer,
   streamsCtrl.deleteStream

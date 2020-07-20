@@ -1,9 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { WHITE_LISTED_METHODS } from "../utils/constants";
+import { Base64 } from "js-base64";
 const User = require("../models/user");
 
 module.exports = {
   checkInstance,
+  matchInstanceToUser,
+  matchInstanceToUserParams,
   checkMethod,
   checkReferer,
 };
@@ -11,6 +14,28 @@ module.exports = {
 function checkInstance(req: Request, res: Response, next: NextFunction) {
   User.findOne({ uuid: req.body.userInstance }).then((user: any) => {
     if (user) {
+      next();
+    } else {
+      return res.send(401);
+    }
+  });
+}
+
+function matchInstanceToUser(req: Request, res: Response, next: NextFunction) {
+  let decoded = Base64.atob(req.body.userId);
+  User.findOne({ userId: decoded }).then((user: any) => {
+    if (user && req.body.userInstance === user.uuid) {
+      next();
+    } else {
+      return res.send(401);
+    }
+  });
+}
+
+function matchInstanceToUserParams(req: Request, res: Response, next: NextFunction) {
+  let decoded = Base64.atob(req.params.userId);
+  User.findOne({ userId: decoded }).then((user: any) => {
+    if (user && req.params.userInstance === user.uuid) {
       next();
     } else {
       return res.send(401);
