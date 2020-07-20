@@ -28,7 +28,6 @@ function get(req: Request, res: Response) {
 }
 
 function create(req: Request, res: Response) {
-  console.log("create stream query:", req.body);
   let uuid: String = uuidv4();
   new Stream({
     userId: req.body.userId,
@@ -46,6 +45,12 @@ function edit(req: Request, res: Response) {
 }
 
 function deleteStream(req: Request, res: Response) {
-  
-  res.json();
+  Stream.find({uuid: req.params.streamId}).then((stream: any) => {
+    if (stream[0].userId === req.params.userId) {
+      Stream.remove(stream[0]).then(() => res.json());
+    }
+    else {
+      return res.send(401);
+    }
+  })
 }
