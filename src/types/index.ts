@@ -3,6 +3,6 @@ declare namespace Express {
         user: Object,
     }
     interface Object {
-        userId: String,
+        username: String,
     }
 }

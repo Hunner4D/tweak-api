@@ -16,12 +16,12 @@ function signIn(req, res) {
         .then((ticket) => {
         const payload = ticket.getPayload();
         const userId = payload["sub"];
-        console.log(payload);
+        // console.log(payload);
         if (payload.email_verified) {
             User.findOne({ userId })
                 .then((user) => {
                 if (user) {
-                    console.log("user exists: ", user);
+                    // console.log("user exists: ", user);
                     const instance = uuid_1.v4();
                     user.uuid = instance;
                     user.save();
@@ -44,7 +44,7 @@ function signIn(req, res) {
                     })
                         .save()
                         .then((createdUser) => {
-                        console.log("created new user: ", createdUser);
+                        // console.log("created new user: ", createdUser);
                         res.send({
                             // userId,
                             instance,

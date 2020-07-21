@@ -18,7 +18,7 @@ function getAll(req, res) {
     Stream.find().then((streams) => {
         let refactoredArray = [];
         lodash_1.default.forEach(streams, (item, i) => {
-            refactoredArray.push(lodash_1.default.pick(item, ["uuid", "title", "description"]));
+            refactoredArray.push(lodash_1.default.pick(item, ["uuid", "owner", "title", "description"]));
         });
         res.json(refactoredArray);
     });
@@ -31,6 +31,7 @@ function create(req, res) {
     let uuid = uuid_1.v4();
     new Stream({
         uuid,
+        owner: req.user.username,
         title: req.body.title,
         description: req.body.description,
     })
