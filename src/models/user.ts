@@ -6,6 +6,8 @@ const userSchema = new Schema({
     uuid: String,
     username: String,
     profileImage: String,
+    email: String,
+    streams: [String],
 });
 
 module.exports = mongoose.model("User", userSchema)

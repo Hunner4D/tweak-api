@@ -7,5 +7,5 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const middleware = require("../middleware");
 const userCtrl = require("../controllers/user");
-router.post("/", middleware.auth, userCtrl.signIn);
+router.post("/", middleware.checkMethod, middleware.checkReferer, userCtrl.signIn);
 module.exports = router;

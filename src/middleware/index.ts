@@ -1,15 +1,49 @@
 import { NextFunction, Request, Response } from "express";
 import { WHITE_LISTED_METHODS } from "../utils/constants";
 import { Base64 } from "js-base64";
+import { OAuth2Client } from "google-auth-library";
+import { request } from "http";
+const client = new OAuth2Client(process.env.OAUTH_CLIENT);
 const User = require("../models/user");
 
 module.exports = {
+  compareTokenToInstance,
   checkInstance,
   matchInstanceToUser,
   matchInstanceToUserParams,
   checkMethod,
   checkReferer,
 };
+
+function compareTokenToInstance(req: Request, res: Response, next: NextFunction) {
+  client
+    .verifyIdToken({
+      idToken: req.body.idToken,
+      audience: process.env.OAUTH_CLIENT,
+      // Or, if multiple clients access the backend:
+      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+    })
+    .then((ticket) => {
+      const payload: any = ticket.getPayload();
+      const userId = payload["sub"];
+      console.log(payload);
+
+      if (payload.email_verified) {
+        User.findOne({userId}).then((user: any) => {
+          if(user.uuid === req.body.userInstance) {
+            req.user = user;
+            next()
+          }
+          else {
+            return res.send(401);
+          }
+        })
+      }
+      else {
+        return res.send(401);
+      }
+    });
+}
 
 function checkInstance(req: Request, res: Response, next: NextFunction) {
   User.findOne({ uuid: req.body.userInstance }).then((user: any) => {
@@ -60,5 +94,3 @@ function checkReferer(req: Request, res: Response, next: NextFunction) {
   }
   next();
 }
-
-export const bruh = () => 2;

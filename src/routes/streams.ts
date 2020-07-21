@@ -19,15 +19,15 @@ router.get(
 
 router.post(
   "/",
-  middleware.matchInstanceToUser,
+  middleware.compareTokenToInstance,
   middleware.checkMethod,
   middleware.checkReferer,
   streamsCtrl.create
 );
 
 router.put(
-  "/:streamId/:userId/:userInstance",
-  middleware.matchInstanceToUserParams,
+  "/:streamId",
+  middleware.compareTokenToInstance,
   middleware.checkMethod,
   middleware.checkReferer,
   streamsCtrl.edit
