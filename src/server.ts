@@ -3,6 +3,7 @@ import path from "path";
 import logger from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import noCache from "nocache";
 
 const app: Application = express();
 
@@ -23,7 +24,7 @@ app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'"],
   }
 }))
-app.use(helmet.noCache());
+app.use(noCache());
 app.use(helmet.permittedCrossDomainPolicies())
 app.use(cors(corsOptions));
 

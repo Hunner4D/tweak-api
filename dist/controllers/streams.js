@@ -38,7 +38,7 @@ function myStreams(req, res) {
         res.send({ error });
     })
         .then((response = []) => {
-        const streams = response.map((r) => Array.isArray(r) ? r[0] : r);
+        const streams = response.map((r) => (Array.isArray(r) ? r[0] : r));
         res.send(streams);
     });
     //new Promise((resolve, reject) => {
@@ -72,20 +72,18 @@ function create(req, res) {
     });
 }
 function edit(req, res) {
-    console.log("edit stream req.body", req.body);
-    Stream.find({ uuid: req.body.formInfo.streamId }).then((stream) => {
-        console.log("stream found: ", stream);
-        if (stream[0].userId === req.body.userId) {
+    console.log("hit", req.body);
+    if (req.user.streams.includes(req.body.streamId)) {
+        Stream.find({ uuid: req.body.streamId }).then((stream) => {
             stream[0].title = req.body.formInfo.title;
             stream[0].description = req.body.formInfo.description;
             stream[0].save();
             res.json();
-        }
-        else {
-            return res.send(401);
-        }
-    });
-    res.json();
+        });
+    }
+    else {
+        return res.send(401);
+    }
 }
 function deleteStream(req, res) {
     if (req.user.streams.includes(req.body.streamId)) {
@@ -97,7 +95,7 @@ function deleteStream(req, res) {
             user.save();
         });
         Stream.find({ uuid: req.body.streamId }).then((stream) => {
-            Stream.remove(stream[0]).then(() => res.json());
+            Stream.deleteOne(stream[0]).then(() => res.json());
         });
     }
     else {

@@ -42,7 +42,7 @@ function myStreams(req: Request, res: Response) {
       res.send({ error });
     })
     .then((response: any = []) => {
-      const streams = response.map((r: any) => Array.isArray(r) ? r[0] : r);
+      const streams = response.map((r: any) => (Array.isArray(r) ? r[0] : r));
       res.send(streams);
     });
 
@@ -79,35 +79,32 @@ function create(req: Request, res: Response) {
 }
 
 function edit(req: Request, res: Response) {
-  console.log("edit stream req.body", req.body);
-  Stream.find({ uuid: req.body.formInfo.streamId }).then((stream: any) => {
-    console.log("stream found: ", stream);
-    if (stream[0].userId === req.body.userId) {
+  console.log("hit", req.body)
+  if (req.user.streams.includes(req.body.streamId)) {
+    Stream.find({ uuid: req.body.streamId }).then((stream: any) => {
       stream[0].title = req.body.formInfo.title;
       stream[0].description = req.body.formInfo.description;
       stream[0].save();
       res.json();
-    } else {
-      return res.send(401);
-    }
-  });
-  res.json();
+    });
+  } else {
+    return res.send(401);
+  }
 }
 
 function deleteStream(req: Request, res: Response) {
-  if(req.user.streams.includes(req.body.streamId)) {
+  if (req.user.streams.includes(req.body.streamId)) {
     User.findOne(req.user).then((user: any) => {
       let updatedStreams = _.remove(user.streams, (id) => {
         return id !== req.body.streamId;
-      })
+      });
       user.streams = updatedStreams;
       user.save();
     });
     Stream.find({ uuid: req.body.streamId }).then((stream: any) => {
-        Stream.remove(stream[0]).then(() => res.json());
+      Stream.deleteOne(stream[0]).then(() => res.json());
     });
-  }
-  else {
-    res.send(401)
+  } else {
+    res.send(401);
   }
 }

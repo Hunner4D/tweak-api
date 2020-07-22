@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
+const nocache_1 = __importDefault(require("nocache"));
 const app = express_1.default();
 require("dotenv").config();
 require("./config/database");
@@ -23,7 +24,7 @@ app.use(helmet_1.default.contentSecurityPolicy({
         defaultSrc: ["'self'"],
     }
 }));
-app.use(helmet_1.default.noCache());
+app.use(nocache_1.default());
 app.use(helmet_1.default.permittedCrossDomainPolicies());
 app.use(cors_1.default(corsOptions));
 app.use("/user", require("./routes/user"));

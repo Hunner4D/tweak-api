@@ -34,7 +34,7 @@ router.post(
 );
 
 router.put(
-  "/:streamId",
+  "/",
   middleware.compareTokenToInstance,
   middleware.checkMethod,
   middleware.checkReferer,
