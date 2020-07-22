@@ -4,6 +4,8 @@ import logger from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import noCache from "nocache";
+const node_media_server = require('./media_server');
+
 
 const app: Application = express();
 
@@ -34,3 +36,4 @@ app.use("/streams", require("./routes/streams"));
 const port = process.env.PORT || 3001;
 
 app.listen(port, () => console.log("Server Running..."));
+node_media_server.run();
