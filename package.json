@@ -21,6 +21,7 @@
     "js-base64": "^3.1.3",
     "mongoose": "^5.9.23",
     "nocache": "^2.1.0",
+    "node-media-server": "^2.2.2",
     "nodemon": "^2.0.4",
     "uuid": "^8.2.0"
   },
