@@ -18,6 +18,14 @@ router.get(
 );
 
 router.post(
+  "/:idToken/:userInstance",
+  middleware.compareTokenToInstance,
+  middleware.checkMethod,
+  middleware.checkReferer,
+  streamsCtrl.myStreams
+);
+
+router.post(
   "/",
   middleware.compareTokenToInstance,
   middleware.checkMethod,
@@ -34,8 +42,8 @@ router.put(
 );
 
 router.delete(
-  "/:streamId/:userId/:userInstance",
-  middleware.matchInstanceToUserParams,
+  "/",
+  middleware.compareTokenToInstance,
   middleware.checkMethod,
   middleware.checkReferer,
   streamsCtrl.deleteStream

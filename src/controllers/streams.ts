@@ -8,6 +8,7 @@ const User = require("../models/user");
 module.exports = {
   getAll,
   get,
+  myStreams,
   create,
   edit,
   deleteStream,
@@ -17,7 +18,9 @@ function getAll(req: Request, res: Response) {
   Stream.find().then((streams: any) => {
     let refactoredArray: object[] = [];
     _.forEach(streams, (item, i) => {
-      refactoredArray.push(_.pick(item, ["uuid", "owner", "title", "description"]));
+      refactoredArray.push(
+        _.pick(item, ["uuid", "owner", "title", "description"])
+      );
     });
     res.json(refactoredArray);
   });
@@ -26,6 +29,35 @@ function getAll(req: Request, res: Response) {
 function get(req: Request, res: Response) {
   console.log("get specific stream hit");
   res.json();
+}
+//      PROMISE METHOD
+function myStreams(req: Request, res: Response) {
+  // Stream.find is async, we need to wait before sending the response
+  // Promise.all([resolve(2), resolve({}), resolve('abc')].then((response) => )
+  // response => [2, {}, 'abc']
+  Promise.all(
+    (req.user.streams || []).map((streamId) => Stream.find({ uuid: streamId }))
+  )
+    .catch((error) => {
+      res.send({ error });
+    })
+    .then((response: any = []) => {
+      const streams = response.map((r: any) => Array.isArray(r) ? r[0] : r);
+      res.send(streams);
+    });
+
+  //new Promise((resolve, reject) => {
+  //  let ownedStreams: any = [];
+  //  _.forEach(req.user.streams, (streamId, i) => {
+  //    Stream.find({ uuid: streamId }).then((streamsFound: any) => {
+  //      ownedStreams.push(streamsFound[0]);
+  //      console.log("owned streams", ownedStreams);
+  //     });
+  //   });
+  //   if (ownedStreams.length === req.user.streams.length) resolve(ownedStreams);
+  // }).then((ownedStreams) => {
+  //   return res.json(ownedStreams);
+  // });
 }
 
 function create(req: Request, res: Response) {
@@ -63,11 +95,19 @@ function edit(req: Request, res: Response) {
 }
 
 function deleteStream(req: Request, res: Response) {
-  Stream.find({ uuid: req.params.streamId }).then((stream: any) => {
-    if (stream[0].userId === req.params.userId) {
-      Stream.remove(stream[0]).then(() => res.json());
-    } else {
-      return res.send(401);
-    }
-  });
+  if(req.user.streams.includes(req.body.streamId)) {
+    User.findOne(req.user).then((user: any) => {
+      let updatedStreams = _.remove(user.streams, (id) => {
+        return id !== req.body.streamId;
+      })
+      user.streams = updatedStreams;
+      user.save();
+    });
+    Stream.find({ uuid: req.body.streamId }).then((stream: any) => {
+        Stream.remove(stream[0]).then(() => res.json());
+    });
+  }
+  else {
+    res.send(401)
+  }
 }

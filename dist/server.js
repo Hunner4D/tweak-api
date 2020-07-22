@@ -28,10 +28,5 @@ app.use(helmet_1.default.permittedCrossDomainPolicies());
 app.use(cors_1.default(corsOptions));
 app.use("/user", require("./routes/user"));
 app.use("/streams", require("./routes/streams"));
-app.get("/", (req, res, next) => {
-    //   console.log("express", express);
-    //   console.log("path", path);
-    res.send("Hello");
-});
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log("Server Running..."));

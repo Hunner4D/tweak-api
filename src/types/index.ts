@@ -4,5 +4,6 @@ declare namespace Express {
     }
     interface Object {
         username: String,
+        streams: Array<String>
     }
 }
