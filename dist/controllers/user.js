@@ -30,7 +30,6 @@ function signIn(req, res) {
                     res.json({
                         // userId,
                         instance,
-                        stream_key: user.stream_key,
                         newUser: false,
                         username: user.username,
                         profileImage: user.profileImage,
@@ -38,21 +37,18 @@ function signIn(req, res) {
                 }
                 else {
                     const instance = uuid_1.v4();
-                    const stream_key = uuid_1.v4();
                     new User({
                         userId,
                         uuid: instance,
                         username: payload.name,
                         profileImage: payload.picture,
                         email: payload.email,
-                        stream_key
                     })
                         .save()
                         .then((createdUser) => {
                         // console.log("created new user: ", createdUser);
                         res.send({
                             instance,
-                            stream_key,
                             newUser: true,
                             username: createdUser.username,
                             profileImage: createdUser.profileImage,

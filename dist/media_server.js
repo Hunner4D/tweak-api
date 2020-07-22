@@ -1,4 +1,4 @@
-const User = require("./models/user");
+const Streams = require("./models/streams");
 
 const NodeMediaServer = require('node-media-server'),
     config = require('./config/rtmpServer').rtmp_server;
@@ -9,9 +9,9 @@ nms.on('prePublish', async (id, StreamPath, args) => {
     let stream_key = getStreamKeyFromStreamPath(StreamPath);
     console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
 
-    User.findOne({stream_key: stream_key}, (err, user) => {
+    Streams.findOne({stream_key: stream_key}, (err, stream) => {
         if (!err) {
-            if (!user) {
+            if (!stream) {
                 let session = nms.getSession(id);
                 session.reject();
             } else {
