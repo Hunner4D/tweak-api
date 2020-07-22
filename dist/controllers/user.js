@@ -30,6 +30,7 @@ function signIn(req, res) {
                     res.json({
                         // userId,
                         instance,
+                        stream_key: user.stream_key,
                         newUser: false,
                         username: user.username,
                         profileImage: user.profileImage,
@@ -71,7 +72,6 @@ function getStreamKey(req, res) {
     res.json({ stream_key: req.user.stream_key });
 }
 function generateStreamKey(req, res) {
-    console.log("generate stream key hit", req.user);
     User.findOne(req.user).then((user) => {
         const stream_key = uuid_1.v4();
         user.stream_key = stream_key;

@@ -78,7 +78,6 @@ function getStreamKey(req: Request, res: Response) {
 }
 
 function generateStreamKey(req: Request, res: Response) {
-  console.log("generate stream key hit", req.user);
   User.findOne(req.user).then((user: any )=> {
     const stream_key = uuidv4();
     user.stream_key = stream_key;
