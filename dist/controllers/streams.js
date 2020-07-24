@@ -56,8 +56,10 @@ function myStreams(req, res) {
 }
 function create(req, res) {
     let uuid = uuid_1.v4();
+    let stream_key = uuid_1.v4();
     new Stream({
         uuid,
+        stream_key,
         owner: req.user.username,
         title: req.body.title,
         description: req.body.description,

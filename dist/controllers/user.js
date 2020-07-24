@@ -6,6 +6,8 @@ const client = new google_auth_library_1.OAuth2Client(process.env.OAUTH_CLIENT);
 const User = require("../models/user");
 module.exports = {
     signIn,
+    generateStreamKey,
+    getStreamKey
 };
 function signIn(req, res) {
     client
@@ -40,13 +42,12 @@ function signIn(req, res) {
                         uuid: instance,
                         username: payload.name,
                         profileImage: payload.picture,
-                        email: payload.email
+                        email: payload.email,
                     })
                         .save()
                         .then((createdUser) => {
                         // console.log("created new user: ", createdUser);
                         res.send({
-                            // userId,
                             instance,
                             newUser: true,
                             username: createdUser.username,
@@ -61,4 +62,16 @@ function signIn(req, res) {
             return res.send(401);
         }
     });
+}
+function getStreamKey(req, res) {
+    console.log("get stream key hit", req.user);
+    res.json({ stream_key: req.user.stream_key });
+}
+function generateStreamKey(req, res) {
+    User.findOne(req.user).then((user) => {
+        const stream_key = uuid_1.v4();
+        user.stream_key = stream_key;
+        user.save();
+        res.json({ stream_key });
+    }).catch((err) => res.send(401));
 }

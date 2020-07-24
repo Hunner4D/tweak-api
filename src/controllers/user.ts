@@ -7,6 +7,8 @@ const User = require("../models/user");
 
 module.exports = {
   signIn,
+  generateStreamKey,
+  getStreamKey
 };
 
 function signIn(req: Request, res: Response) {
@@ -44,13 +46,12 @@ function signIn(req: Request, res: Response) {
                 uuid: instance,
                 username: payload.name,
                 profileImage: payload.picture,
-                email: payload.email
+                email: payload.email,
               })
                 .save()
                 .then((createdUser: any) => {
                   // console.log("created new user: ", createdUser);
                   res.send({
-                    // userId,
                     instance,
                     newUser: true,
                     username: createdUser.username,
@@ -65,4 +66,18 @@ function signIn(req: Request, res: Response) {
         return res.send(401)
       }
     });
+}
+
+function getStreamKey(req: Request, res: Response) {
+  console.log("get stream key hit", req.user);
+  res.json({stream_key: req.user.stream_key})
+}
+
+function generateStreamKey(req: Request, res: Response) {
+  User.findOne(req.user).then((user: any )=> {
+    const stream_key = uuidv4();
+    user.stream_key = stream_key;
+    user.save()
+    res.json({ stream_key })
+  }).catch((err: any) => res.send(401))
 }
