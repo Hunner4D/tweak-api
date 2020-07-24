@@ -10,4 +10,11 @@ router.get(
   rtmpCtrl.getAll
 );
 
+router.get(
+  "/:streamId",
+  middleware.checkMethod,
+  middleware.checkReferer,
+  rtmpCtrl.getOne
+);
+
 module.exports = router;

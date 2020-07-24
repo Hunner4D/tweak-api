@@ -6,6 +6,7 @@ const Stream = require("../models/streams");
 
 module.exports = {
   getAll,
+  getOne,
 };
 
 function getAll(req: Request, res: Response) {
@@ -32,18 +33,30 @@ function getAll(req: Request, res: Response) {
               _.pick(item, ["uuid", "owner", "title", "description"])
             );
           });
-          console.log(refactoredStreams)
-          res.json(refactoredStreams)
+          res.json(refactoredStreams);
         });
       }
     });
 }
 
-// Promise.all((req.user.streams || []).map((streamId) => Stream.find({ uuid: streamId })))
-//         .catch((error) => {
-//         res.send({ error });
-//     })
-//         .then((response = []) => {
-//         const streams = response.map((r) => (Array.isArray(r) ? r[0] : r));
-//         res.send(streams);
-//     });
+function getOne(req: Request, res: Response) {
+  Stream.findOne({uuid: req.params.streamId}).then((stream: any) => {
+    let videoJsOptions = {
+      autoplay: false,
+      controls: true,
+      sources: [
+        {
+          src:
+            "http://127.0.0.1:" +
+            config.rtmp_server.http.port +
+            "/live/" +
+            stream.stream_key +
+            "/index.m3u8",
+          type: "application/x-mpegURL",
+        },
+      ],
+      fluid: true,
+    };
+    res.json(videoJsOptions)
+  });
+}
