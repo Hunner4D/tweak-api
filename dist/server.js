@@ -30,6 +30,7 @@ app.use(helmet_1.default.permittedCrossDomainPolicies());
 app.use(cors_1.default(corsOptions));
 app.use("/user", require("./routes/user"));
 app.use("/streams", require("./routes/streams"));
+app.use("/rtmp", require("./routes/rtmp"));
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log("Server Running..."));
 node_media_server.run();

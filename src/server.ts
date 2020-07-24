@@ -32,6 +32,7 @@ app.use(cors(corsOptions));
 
 app.use("/user", require("./routes/user"));
 app.use("/streams", require("./routes/streams"));
+app.use("/rtmp", require("./routes/rtmp"));
 
 const port = process.env.PORT || 3001;
 
