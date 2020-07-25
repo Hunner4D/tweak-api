@@ -35,21 +35,7 @@ function getAll(req, res) {
 }
 function getOne(req, res) {
     Stream.findOne({ uuid: req.params.streamId }).then((stream) => {
-        let videoJsOptions = {
-            autoplay: false,
-            controls: true,
-            sources: [
-                {
-                    src: "http://127.0.0.1:" +
-                        config.rtmp_server.http.port +
-                        "/live/" +
-                        stream.stream_key +
-                        "/index.m3u8",
-                    type: "application/x-mpegURL",
-                },
-            ],
-            fluid: true,
-        };
-        res.json(videoJsOptions);
+        let flvSource = `http://localhost:${config.rtmp_server.http.port}/live/${stream.stream_key}.flv`;
+        res.json(flvSource);
     });
 }

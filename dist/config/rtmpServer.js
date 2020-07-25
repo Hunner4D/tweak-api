@@ -1,7 +1,7 @@
 "use strict";
 const config = {
     server: {
-        secret: 'kjVkuti2xAyF3JGCzSZTk0YWM5JhI9mgQW4rytXc'
+        secret: 'kjVJGCzSZTk0YWM2kutiW4ryxAyF3hI9mgQ5JtXc'
     },
     rtmp_server: {
         rtmp: {

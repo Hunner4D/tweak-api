@@ -40,23 +40,9 @@ function getAll(req: Request, res: Response) {
 }
 
 function getOne(req: Request, res: Response) {
-  Stream.findOne({uuid: req.params.streamId}).then((stream: any) => {
-    let videoJsOptions = {
-      autoplay: false,
-      controls: true,
-      sources: [
-        {
-          src:
-            "http://127.0.0.1:" +
-            config.rtmp_server.http.port +
-            "/live/" +
-            stream.stream_key +
-            "/index.m3u8",
-          type: "application/x-mpegURL",
-        },
-      ],
-      fluid: true,
-    };
-    res.json(videoJsOptions)
+  Stream.findOne({ uuid: req.params.streamId }).then((stream: any) => {
+    let flvSource = `http://localhost:${config.rtmp_server.http.port}/live/${stream.stream_key}.flv`;
+
+    res.json(flvSource);
   });
 }
