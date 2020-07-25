@@ -42,17 +42,18 @@ function getAll(req: Request, res: Response) {
 function getOne(req: Request, res: Response) {
   Stream.findOne({ uuid: req.params.streamId }).then((stream: any) => {
     let videoJsOptions = {
-      autoplay: false,
+      autoplay: true,
+      liveui: true,
       controls: true,
       sources: [
         {
           src:
             "http://127.0.0.1:" +
             config.rtmp_server.http.port +
-            "/live/" +
-            stream.stream_key +
-            "/index.m3u8",
+            "/api/streams/live/" +
+            stream.stream_key,
           type: "application/x-mpegURL",
+          // type: "video/mp4",
         },
       ],
       fluid: true,
