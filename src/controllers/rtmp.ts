@@ -40,7 +40,7 @@ function getAll(req: Request, res: Response) {
 }
 
 function getOne(req: Request, res: Response) {
-  Stream.findOne({uuid: req.params.streamId}).then((stream: any) => {
+  Stream.findOne({ uuid: req.params.streamId }).then((stream: any) => {
     let videoJsOptions = {
       autoplay: false,
       controls: true,
@@ -57,6 +57,6 @@ function getOne(req: Request, res: Response) {
       ],
       fluid: true,
     };
-    res.json(videoJsOptions)
+    res.json(videoJsOptions);
   });
 }
