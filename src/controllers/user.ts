@@ -7,8 +7,7 @@ const User = require("../models/user");
 
 module.exports = {
   signIn,
-  generateStreamKey,
-  getStreamKey
+  editProfile,
 };
 
 function signIn(req: Request, res: Response) {
@@ -38,6 +37,8 @@ function signIn(req: Request, res: Response) {
                 newUser: false,
                 username: user.username,
                 profileImage: user.profileImage,
+                category: user.category,
+                about: user.about,
               });
             } else {
               const instance: String = uuidv4();
@@ -47,6 +48,8 @@ function signIn(req: Request, res: Response) {
                 username: payload.name,
                 profileImage: payload.picture,
                 email: payload.email,
+                category: "Streamer",
+                about: "",
               })
                 .save()
                 .then((createdUser: any) => {
@@ -56,28 +59,29 @@ function signIn(req: Request, res: Response) {
                     newUser: true,
                     username: createdUser.username,
                     profileImage: createdUser.profileImage,
+                    category: "Streamer",
+                    about: "",
                   });
                 });
             }
           })
           .catch();
-      }
-      else {
-        return res.send(401)
+      } else {
+        return res.send(401);
       }
     });
 }
 
-function getStreamKey(req: Request, res: Response) {
-  console.log("get stream key hit", req.user);
-  res.json({stream_key: req.user.stream_key})
-}
-
-function generateStreamKey(req: Request, res: Response) {
-  User.findOne(req.user).then((user: any )=> {
-    const stream_key = uuidv4();
-    user.stream_key = stream_key;
-    user.save()
-    res.json({ stream_key })
-  }).catch((err: any) => res.send(401))
+function editProfile(req: Request, res: Response) {
+  User.findOne(req.user).then((user: any) => {
+    if (req.body.data.username) user.username = req.body.data.username;
+    if (req.body.data.category) user.category = req.body.data.category;
+    if (req.body.data.about) user.about = req.body.data.about;
+    user.save();
+    res.json({
+      username: user.username,
+      category: user.category,
+      about: user.about,
+    });
+  });
 }

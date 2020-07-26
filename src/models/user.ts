@@ -7,6 +7,8 @@ const userSchema = new Schema({
     username: String,
     profileImage: String,
     email: String,
+    category: String,
+    about: String,
     streams: [String],
 });
 

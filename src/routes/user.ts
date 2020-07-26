@@ -11,19 +11,11 @@ router.post(
 );
 
 router.post(
-  "/:settings/:stream_key",
+  "/:id",
   middleware.compareTokenToInstance,
   middleware.checkMethod,
   middleware.checkReferer,
-  userCtrl.generateStreamKey
+  userCtrl.editProfile
 );
-
-// router.get(
-//   "settings/stream_key",
-//   middleware.compareTokenToInstance,
-//   middleware.checkMethod,
-//   middleware.checkReferer,
-//   userCtrl.getStreamKey
-// );
 
 module.exports = router;

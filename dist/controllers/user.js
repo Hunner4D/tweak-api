@@ -6,8 +6,7 @@ const client = new google_auth_library_1.OAuth2Client(process.env.OAUTH_CLIENT);
 const User = require("../models/user");
 module.exports = {
     signIn,
-    generateStreamKey,
-    getStreamKey
+    editProfile,
 };
 function signIn(req, res) {
     client
@@ -33,6 +32,8 @@ function signIn(req, res) {
                         newUser: false,
                         username: user.username,
                         profileImage: user.profileImage,
+                        category: user.category,
+                        about: user.about,
                     });
                 }
                 else {
@@ -43,6 +44,8 @@ function signIn(req, res) {
                         username: payload.name,
                         profileImage: payload.picture,
                         email: payload.email,
+                        category: "Streamer",
+                        about: "",
                     })
                         .save()
                         .then((createdUser) => {
@@ -52,6 +55,8 @@ function signIn(req, res) {
                             newUser: true,
                             username: createdUser.username,
                             profileImage: createdUser.profileImage,
+                            category: "Streamer",
+                            about: "",
                         });
                     });
                 }
@@ -63,15 +68,19 @@ function signIn(req, res) {
         }
     });
 }
-function getStreamKey(req, res) {
-    console.log("get stream key hit", req.user);
-    res.json({ stream_key: req.user.stream_key });
-}
-function generateStreamKey(req, res) {
+function editProfile(req, res) {
     User.findOne(req.user).then((user) => {
-        const stream_key = uuid_1.v4();
-        user.stream_key = stream_key;
+        if (req.body.data.username)
+            user.username = req.body.data.username;
+        if (req.body.data.category)
+            user.category = req.body.data.category;
+        if (req.body.data.about)
+            user.about = req.body.data.about;
         user.save();
-        res.json({ stream_key });
-    }).catch((err) => res.send(401));
+        res.json({
+            username: user.username,
+            category: user.category,
+            about: user.about,
+        });
+    });
 }

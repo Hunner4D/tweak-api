@@ -11,6 +11,8 @@ const userSchema = new Schema({
     username: String,
     profileImage: String,
     email: String,
+    category: String,
+    about: String,
     streams: [String],
 });
 module.exports = mongoose_1.default.model("User", userSchema);

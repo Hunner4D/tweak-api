@@ -8,12 +8,5 @@ const router = express_1.default.Router();
 const middleware = require("../middleware");
 const userCtrl = require("../controllers/user");
 router.post("/", middleware.checkMethod, middleware.checkReferer, userCtrl.signIn);
-router.post("/:settings/:stream_key", middleware.compareTokenToInstance, middleware.checkMethod, middleware.checkReferer, userCtrl.generateStreamKey);
-// router.get(
-//   "settings/stream_key",
-//   middleware.compareTokenToInstance,
-//   middleware.checkMethod,
-//   middleware.checkReferer,
-//   userCtrl.getStreamKey
-// );
+router.post("/:id", middleware.compareTokenToInstance, middleware.checkMethod, middleware.checkReferer, userCtrl.editProfile);
 module.exports = router;
