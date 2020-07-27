@@ -6,21 +6,22 @@ const NodeMediaServer = require('node-media-server'),
 
 nms = new NodeMediaServer(config);
 
-// nms.on('prePublish', async (id, StreamPath, args) => {
-//     let stream_key = getStreamKeyFromStreamPath(StreamPath);
-//     console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+nms.on('prePublish', async (id, StreamPath, args) => {
+    let stream_key = getStreamKeyFromStreamPath(StreamPath);
+    console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
 
-//     Streams.findOne({stream_key: stream_key}, (err, stream) => {
-//         if (!err) {
-//             if (!stream) {
-//                 let session = nms.getSession(id);
-//                 session.reject();
-//             } else {
-//                 // do stuff
-//             }
-//         }
-//     });
-// });
+    Streams.findOne({stream_key: stream_key}, (err, stream) => {
+        if (!err) {
+            if (!stream) {
+                let session = nms.getSession(id);
+                session.reject();
+            } else {
+                stream.live = true;
+                stream.save();
+            }
+        }
+    });
+});
 
 const getStreamKeyFromStreamPath = (path) => {
     let parts = path.split('/');

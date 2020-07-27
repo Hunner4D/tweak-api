@@ -10,6 +10,6 @@ const streamSchema = new Schema({
     owner: String,
     stream_key: String,
     title: String,
-    description: String
+    description: String,
 });
 module.exports = mongoose_1.default.model("Streams", streamSchema);
