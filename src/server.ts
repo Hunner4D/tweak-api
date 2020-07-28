@@ -5,6 +5,7 @@ import cors from "cors";
 import helmet from "helmet";
 import noCache from "nocache";
 const node_media_server = require('./media_server');
+const web_socket_server = require('./websocket_server');
 
 
 const app: Application = express();
@@ -38,3 +39,4 @@ const port = process.env.PORT || 3001;
 
 app.listen(port, () => console.log("Server Running..."));
 node_media_server.run();
+web_socket_server.listen(7777, () => console.log("CHAT WEB SOCKETS ON 7777"));
