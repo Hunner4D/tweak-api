@@ -2,8 +2,10 @@ const wsServer = require("http").createServer();
 const io = require("socket.io")(wsServer, {
   transports: ["websocket", "polling"],
 });
+// const redisAdapter = require('socket.io-redis');
+// io.adapter(redisAdapter({ host: 'localhost', port: 7777 }));
+// const redisIo = 
 
-const rooms = {};
 
 io.on("connection", (client) => {
   client.on("userConnect", (chatId) => {
@@ -11,6 +13,7 @@ io.on("connection", (client) => {
   });
 
   client.on("send", (messageInfo) => {
+    console.log("sent")
     io.sockets
       .in("room-", messageInfo.chatId)
       .emit("message", {
@@ -23,5 +26,4 @@ io.on("connection", (client) => {
 
 });
 
-// wsServer.listen(7777, () => console.log("CHAT WEB SOCKETS ON 7777"));
 module.exports = wsServer;
