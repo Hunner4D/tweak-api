@@ -13,7 +13,7 @@ io.on("connection", (client) => {
   });
 
   client.on("send", (messageInfo) => {
-    console.log("sent")
+    console.log("sent:", messageInfo.message)
     io.sockets
       .in("room-", messageInfo.chatId)
       .emit("message", {
