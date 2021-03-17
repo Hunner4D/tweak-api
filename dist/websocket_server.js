@@ -2,10 +2,6 @@ const wsServer = require("http").createServer();
 const io = require("socket.io")(wsServer, {
   transports: ["websocket", "polling"],
 });
-// const redisAdapter = require('socket.io-redis');
-// io.adapter(redisAdapter({ host: 'localhost', port: 7777 }));
-// const redisIo = 
-
 
 io.on("connection", (client) => {
   client.on("userConnect", (chatId) => {
@@ -18,7 +14,7 @@ io.on("connection", (client) => {
       .in("room-", messageInfo.chatId)
       .emit("message", {
         text: messageInfo.message,
-        date: new Date().toISOString(),
+        date: new Date().toLocaleDateString(),
         user: messageInfo.username,
         image: messageInfo.profileImage
       });
